@@ -1,8 +1,6 @@
 type Prop<T> = (() -> T) | T?
 type Event<T=() -> ()> = T?
-type Array<T=any> = {T}
-type Dictionary<T=any> = {[string]: T}
-export type propsInstance = {
+export type Instance = {
 	-- Instance
 	Archivable: Prop<boolean>;
 	Name: Prop<string>;
@@ -16,7 +14,7 @@ export type propsInstance = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsFolder = {
+export type Folder = {
 	-- Folder
 	-- Instance
 	Archivable: Prop<boolean>;
@@ -31,7 +29,7 @@ export type propsFolder = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsBillboardGui = {
+export type BillboardGui = {
 	-- BillboardGui
 	Active: Prop<boolean>;
 	Adornee: Prop<Instance>;
@@ -77,7 +75,7 @@ export type propsBillboardGui = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsCanvasGroup = {
+export type CanvasGroup = {
 	-- CanvasGroup
 	GroupColor3: Prop<Color3>;
 	GroupTransparency: Prop<number>;
@@ -117,12 +115,12 @@ export type propsCanvasGroup = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -146,7 +144,7 @@ export type propsCanvasGroup = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsFrame = {
+export type Frame = {
 	-- Frame
 	Style: Prop<Enum.FrameStyle>;
 	-- GuiObject
@@ -185,12 +183,12 @@ export type propsFrame = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -214,7 +212,7 @@ export type propsFrame = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsImageButton = {
+export type ImageButton = {
 	-- ImageButton
 	HoverImage: Prop<string>;
 	Image: Prop<string>;
@@ -276,12 +274,12 @@ export type propsImageButton = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -305,7 +303,7 @@ export type propsImageButton = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsImageLabel = {
+export type ImageLabel = {
 	-- ImageLabel
 	Image: Prop<string>;
 	ImageColor3: Prop<Color3>;
@@ -354,12 +352,12 @@ export type propsImageLabel = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -383,7 +381,7 @@ export type propsImageLabel = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsScreenGui = {
+export type ScreenGui = {
 	-- ScreenGui
 	ClipToDeviceSafeArea: Prop<boolean>;
 	DisplayOrder: Prop<number>;
@@ -417,7 +415,7 @@ export type propsScreenGui = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsScrollingFrame = {
+export type ScrollingFrame = {
 	-- ScrollingFrame
 	AutomaticCanvasSize: Prop<Enum.AutomaticSize>;
 	BottomImage: Prop<string>;
@@ -470,12 +468,12 @@ export type propsScrollingFrame = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -499,7 +497,7 @@ export type propsScrollingFrame = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsSurfaceGui = {
+export type SurfaceGui = {
 	-- SurfaceGui
 	AlwaysOnTop: Prop<boolean>;
 	Brightness: Prop<number>;
@@ -542,7 +540,7 @@ export type propsSurfaceGui = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsTextBox = {
+export type TextBox = {
 	-- TextBox
 	ClearTextOnFocus: Prop<boolean>;
 	CursorPosition: Prop<number>;
@@ -608,12 +606,12 @@ export type propsTextBox = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -637,7 +635,7 @@ export type propsTextBox = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsTextButton = {
+export type TextButton = {
 	-- TextButton
 	Font: Prop<Enum.Font>;
 	FontFace: Prop<Font>;
@@ -704,12 +702,12 @@ export type propsTextButton = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -733,7 +731,7 @@ export type propsTextButton = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsTextLabel = {
+export type TextLabel = {
 	-- TextLabel
 	Font: Prop<Enum.Font>;
 	FontFace: Prop<Font>;
@@ -789,12 +787,12 @@ export type propsTextLabel = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -818,7 +816,7 @@ export type propsTextLabel = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIAspectRatioConstraint = {
+export type UIAspectRatioConstraint = {
 	-- UIAspectRatioConstraint
 	AspectRatio: Prop<number>;
 	AspectType: Prop<Enum.AspectType>;
@@ -839,7 +837,7 @@ export type propsUIAspectRatioConstraint = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUICorner = {
+export type UICorner = {
 	-- UICorner
 	CornerRadius: Prop<UDim>;
 	-- UIComponent
@@ -857,7 +855,7 @@ export type propsUICorner = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIGradient = {
+export type UIGradient = {
 	-- UIGradient
 	Color: Prop<ColorSequence>;
 	Enabled: Prop<boolean>;
@@ -879,7 +877,7 @@ export type propsUIGradient = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIGridLayout = {
+export type UIGridLayout = {
 	-- UIGridLayout
 	CellPadding: Prop<UDim2>;
 	CellSize: Prop<UDim2>;
@@ -906,7 +904,7 @@ export type propsUIGridLayout = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIListLayout = {
+export type UIListLayout = {
 	-- UIListLayout
 	Padding: Prop<UDim>;
 	-- UIGridStyleLayout
@@ -930,7 +928,7 @@ export type propsUIListLayout = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIPadding = {
+export type UIPadding = {
 	-- UIPadding
 	PaddingBottom: Prop<UDim>;
 	PaddingLeft: Prop<UDim>;
@@ -951,7 +949,7 @@ export type propsUIPadding = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIPageLayout = {
+export type UIPageLayout = {
 	-- UIPageLayout
 	Animated: Prop<boolean>;
 	Circular: Prop<boolean>;
@@ -986,7 +984,7 @@ export type propsUIPageLayout = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIScale = {
+export type UIScale = {
 	-- UIScale
 	Scale: Prop<number>;
 	-- UIComponent
@@ -1004,7 +1002,7 @@ export type propsUIScale = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUISizeConstraint = {
+export type UISizeConstraint = {
 	-- UISizeConstraint
 	MaxSize: Prop<Vector2>;
 	MinSize: Prop<Vector2>;
@@ -1024,7 +1022,7 @@ export type propsUISizeConstraint = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUIStroke = {
+export type UIStroke = {
 	-- UIStroke
 	ApplyStrokeMode: Prop<Enum.ApplyStrokeMode>;
 	Color: Prop<Color3>;
@@ -1047,7 +1045,7 @@ export type propsUIStroke = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUITableLayout = {
+export type UITableLayout = {
 	-- UITableLayout
 	FillEmptySpaceColumns: Prop<boolean>;
 	FillEmptySpaceRows: Prop<boolean>;
@@ -1074,7 +1072,7 @@ export type propsUITableLayout = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsUITextSizeConstraint = {
+export type UITextSizeConstraint = {
 	-- UITextSizeConstraint
 	MaxTextSize: Prop<number>;
 	MinTextSize: Prop<number>;
@@ -1094,7 +1092,7 @@ export type propsUITextSizeConstraint = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsVideoFrame = {
+export type VideoFrame = {
 	-- VideoFrame
 	Looped: Prop<boolean>;
 	Playing: Prop<boolean>;
@@ -1142,12 +1140,12 @@ export type propsVideoFrame = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -1171,7 +1169,7 @@ export type propsVideoFrame = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsViewportFrame = {
+export type ViewportFrame = {
 	-- ViewportFrame
 	Ambient: Prop<Color3>;
 	CurrentCamera: Prop<Camera>;
@@ -1215,12 +1213,12 @@ export type propsViewportFrame = {
 	MouseWheelForward: Event<(x: number, y: number) -> ()>;
 	SelectionGained: Event<() -> ()>;
 	SelectionLost: Event<() -> ()>;
-	TouchLongPress: Event<(touchPositions: Array, state: Enum.UserInputState) -> ()>;
-	TouchPan: Event<(touchPositions: Array, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
-	TouchPinch: Event<(touchPositions: Array, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
-	TouchRotate: Event<(touchPositions: Array, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchLongPress: Event<(touchPositions: {Vector2}, state: Enum.UserInputState) -> ()>;
+	TouchPan: Event<(touchPositions: {Vector2}, totalTranslation: Vector2, velocity: Vector2, state: Enum.UserInputState) -> ()>;
+	TouchPinch: Event<(touchPositions: {Vector2}, scale: number, velocity: number, state: Enum.UserInputState) -> ()>;
+	TouchRotate: Event<(touchPositions: {Vector2}, rotation: number, velocity: number, state: Enum.UserInputState) -> ()>;
 	TouchSwipe: Event<(swipeDirection: Enum.SwipeDirection, numberOfTouches: number) -> ()>;
-	TouchTap: Event<(touchPositions: Array) -> ()>;
+	TouchTap: Event<(touchPositions: {Vector2}) -> ()>;
 	-- GuiBase2d
 	AutoLocalize: Prop<boolean>;
 	RootLocalizationTable: Prop<LocalizationTable>;
@@ -1244,7 +1242,7 @@ export type propsViewportFrame = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsCamera = {
+export type Camera = {
 	-- Camera
 	CFrame: Prop<CFrame>;
 	CameraSubject: Prop<Instance>;
@@ -1271,7 +1269,7 @@ export type propsCamera = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
-export type propsWorldModel = {
+export type WorldModel = {
 	-- WorldModel
 	-- WorldRoot
 	-- Model
@@ -1292,3 +1290,4 @@ export type propsWorldModel = {
 	DescendantRemoving: Event<(descendant: Instance) -> ()>;
 	Destroying: Event<() -> ()>;
 }
+return {}
