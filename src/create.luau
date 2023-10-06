@@ -5,6 +5,7 @@ local Instance = game and Instance or require "test/mock".Instance :: never
 local throw = require(script.Parent.throw)
 local defaults = require(script.Parent.defaults)
 local apply = require(script.Parent.apply)
+local roblox_types = require(script.Parent.roblox_types)
 
 local ctor_cache = {} :: { [string]: () -> Instance }
 
@@ -54,31 +55,33 @@ end
 
 type Props = { [any]: any }
 return (create :: any) :: 
-( <T>(T & Instance) -> (Props) -> T ) &
-( ("Folder") -> (Props) -> Folder ) &
-( ("BillboardGui") -> (Props) -> BillboardGui ) &
-( ("CanvasGroup") -> (Props) -> CanvasGroup ) &
-( ("Frame") -> (Props) -> Frame ) &
-( ("ImageButton") -> (Props) -> ImageButton ) &
-( ("ImageLabel") -> (Props) -> ImageLabel ) &
-( ("ScreenGui") -> (Props) -> ScreenGui ) &
-( ("ScrollingFrame") -> (Props) -> ScrollingFrame ) &
-( ("SurfaceGui") -> (Props) -> SurfaceGui ) &
-( ("TextBox") -> (Props) -> TextBox ) &
-( ("TextButton") -> (Props) -> TextButton ) &
-( ("TextLabel") -> (Props) -> TextLabel ) &
-( ("UIAspectRatioConstraint") -> (Props) -> UIAspectRatioConstraint ) &
-( ("UICorner") -> (Props) -> UICorner ) &
-( ("UIGradient") -> (Props) -> UIGradient ) &
-( ("UIGridLayout") -> (Props) -> UIGridLayout ) &
-( ("UIListLayout") -> (Props) -> UIListLayout ) &
-( ("UIPadding") -> (Props) -> UIPadding ) &
-( ("UIPageLayout") -> (Props) -> UIPageLayout ) &
-( ("UIScale") -> (Props) -> UIScale ) &
-( ("UISizeConstraint") -> (Props) -> UISizeConstraint ) &
-( ("UIStroke") -> (Props) -> UIStroke ) &
-( ("UITableLayout") -> (Props) -> UITableLayout ) &
-( ("UITextSizeConstraint") -> (Props) -> UITextSizeConstraint ) &
-( ("VideoFrame") -> (Props) -> VideoFrame ) &
-( ("ViewportFrame") -> (Props) -> ViewportFrame ) &
-( (string) -> (Props) -> Instance )
+( <T>(T & Instance) -> (roblox_types.pInstance) -> T ) &
+( ("Folder") -> (roblox_types.pFolder) -> Folder ) &
+( ("BillboardGui") -> (roblox_types.pBillboardGui) -> BillboardGui ) &
+( ("CanvasGroup") -> (roblox_types.pCanvasGroup) -> CanvasGroup ) &
+( ("Frame") -> (roblox_types.pFrame) -> Frame ) &
+( ("ImageButton") -> (roblox_types.pImageButton) -> ImageButton ) &
+( ("ImageLabel") -> (roblox_types.pImageLabel) -> ImageLabel ) &
+( ("ScreenGui") -> (roblox_types.pScreenGui) -> ScreenGui ) &
+( ("ScrollingFrame") -> (roblox_types.pScrollingFrame) -> ScrollingFrame ) &
+( ("SurfaceGui") -> (roblox_types.pSurfaceGui) -> SurfaceGui ) &
+( ("TextBox") -> (roblox_types.pTextBox) -> TextBox ) &
+( ("TextButton") -> (roblox_types.pTextButton) -> TextButton ) &
+( ("TextLabel") -> (roblox_types.pTextLabel) -> TextLabel ) &
+( ("UIAspectRatioConstraint") -> (roblox_types.pUIAspectRatioConstraint) -> UIAspectRatioConstraint ) &
+( ("UICorner") -> (roblox_types.pUICorner) -> UICorner ) &
+( ("UIGradient") -> (roblox_types.pUIGradient) -> UIGradient ) &
+( ("UIGridLayout") -> (roblox_types.pUIGridLayout) -> UIGridLayout ) &
+( ("UIListLayout") -> (roblox_types.pUIListLayout) -> UIListLayout ) &
+( ("UIPadding") -> (roblox_types.pUIPadding) -> UIPadding ) &
+( ("UIPageLayout") -> (roblox_types.pUIPageLayout) -> UIPageLayout ) &
+( ("UIScale") -> (roblox_types.pUIScale) -> UIScale ) &
+( ("UISizeConstraint") -> (roblox_types.pUISizeConstraint) -> UISizeConstraint ) &
+( ("UIStroke") -> (roblox_types.pUIStroke) -> UIStroke ) &
+( ("UITableLayout") -> (roblox_types.pUITableLayout) -> UITableLayout ) &
+( ("UITextSizeConstraint") -> (roblox_types.pUITextSizeConstraint) -> UITextSizeConstraint ) &
+( ("VideoFrame") -> (roblox_types.pVideoFrame) -> VideoFrame ) &
+( ("ViewportFrame") -> (roblox_types.pViewportFrame) -> ViewportFrame ) &
+( ("Camera") -> (roblox_types.pCamera) -> Camera ) &
+( ("WorldModel") -> (roblox_types.pWorldModel) -> WorldModel ) &
+( (string) -> (roblox_types.pInstance) -> Instance )

@@ -1,5 +1,19 @@
 import requests
 
+enable_formatting = False
+new_line = ";"
+next_entry = ";"
+new_line_not_required = ""
+indent = ""
+space = ""
+
+if enable_formatting:
+	new_line = "\n"
+	new_line_not_required = "\n"
+	space = " "
+	next_entry = ",\n"
+	indent = "\t"
+
 desired_classes = [
 	"Instance",
 	"Folder",
@@ -33,20 +47,17 @@ desired_classes = [
 ]
 
 lines_before = [
-	"type Prop<T> = (() -> T) | T?",
-	"type Event<T=() -> ()> = T?"
-	""
+	"type p<T> ="+space+"T?|()->T",
+	"type e<T=()->()> ="+space+"T?",
+	"type a={priority:"+space+"number,"+space+"callback:"+space+"(Instance)"+space+"->"+space+"()}",
+	"type c<T> =a|T|Instance|()->{Instance}|Instance"
 ]
 
 lines_after = [
-	""
-	"return {}"
+	"return{}"
 ]
 
 lines = []
-
-for line in lines_before:
-	lines.append(line)
 
 API_DUMP_LINK = "https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/API-Dump.json"
 CORRECTIONS_LINK = "https://raw.githubusercontent.com/NightrainsRbx/RobloxLsp/master/server/api/Corrections.json"
@@ -63,7 +74,8 @@ aliases = {
 	"float": "number",
 	"double": "number",
 	"bool": "boolean",
-	"Content": "string"
+	"Content": "string",
+	"string": "string"+space+"|"+space+"number"
 }
 
 mapCorrections = {}
@@ -82,7 +94,7 @@ def get_prop_type(value_type):
 	if value_type["Category"] == "Enum":
 		prop = "Enum." + value_type["Name"]
 	elif value_type["Category"] == "Class":
-		prop = value_type["Name"]
+		prop = value_type["Name"] + "?"
 	elif value_type["Category"] == "Primitive":
 		value_name = value_type["Name"]
 		prop = aliases.get(value_name) or value_name
@@ -97,7 +109,7 @@ def get_prop_type(value_type):
 	return prop
 
 def append_class(roblox_class):
-	lines.append("\t-- " + roblox_class["Name"])
+	#lines.append("\t-- " + roblox_class["Name"])
 	correction_class = mapCorrections.get(roblox_class["Name"]) or {"Members": []}
 	correction_members_map = {}
 
@@ -115,7 +127,7 @@ def append_class(roblox_class):
 			
 			if "Deprecated" in member: continue
 
-			lines.append("\t" + member["Name"] + ": Prop<" + get_prop_type(member["ValueType"]) + ">;")
+			lines.append(indent+member["Name"] + ":"+space+"p<" + get_prop_type(member["ValueType"]) + ">"+next_entry)
 		elif member["MemberType"] == "Event":
 			if member["Security"] != "None": continue
 
@@ -125,17 +137,17 @@ def append_class(roblox_class):
 			for parameter in correction_member["Parameters"]:
 				correction_parameters_map[parameter["Name"]] = parameter
 
-			line = "\t" + member["Name"] + ": Event<("
+			line = indent+member["Name"] + ":"+space+"e<("
 			is_first = True
 			for parameter in member["Parameters"]:
 
 				correction_parameter = correction_parameters_map.get(parameter["Name"])
 				
 				if is_first == False:
-					line += ", "
+					line += ","
 				is_first = False
 
-				line += parameter["Name"] + ": "
+				line += parameter["Name"] + ":"
 
 				if correction_parameter == None:
 					line += get_prop_type(parameter["Type"])
@@ -148,7 +160,7 @@ def append_class(roblox_class):
 					elif generic != None:
 						line += "{" + generic + "}"
 
-			line += ") -> ()>;"
+			line += ")"+space+"->"+space+"()>"+next_entry
 			lines.append(line)
 	
 	if roblox_class["Superclass"] != "<<<ROOT>>>":
@@ -157,10 +169,10 @@ def append_class(roblox_class):
 for class_name in desired_classes:
 	roblox_class = mapRobloxClasses[class_name]
 	name = roblox_class['Name']
-	lines.append("export type " + name + " = {")
-	append_class(roblox_class)	
-	lines.append("}")
+	lines.append("export type p" + name + space + "="+space+"{"+new_line_not_required)
+	append_class(roblox_class)
+	lines.append(indent+"[number]:"+space+"c<p"+name+">"+new_line)
+	lines.append(new_line_not_required+"}"+new_line)
 
-dump = '\n'.join(lines)
-print(dump)
-print('\n'.join(lines_after))
+single_line = new_line.join(lines_before) + new_line + ''.join(lines) + new_line.join(lines_after)
+print(single_line)
