@@ -8,3 +8,6 @@ docs/.vitepress/dist
 docs/.vitepress/cache
 docs/node_modules
 docs/package-lock.json
+
+# Please run scripts/dump_types.py to generate this file
+src/roblox_types.luau

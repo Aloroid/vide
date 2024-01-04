@@ -1,6 +1,6 @@
 import requests
 
-enable_formatting = False
+enable_formatting = True
 new_line = ";"
 next_entry = ";"
 new_line_not_required = ""
@@ -14,6 +14,7 @@ if enable_formatting:
 	next_entry = ",\n"
 	indent = "\t"
 
+compile_for_all_classes = True
 desired_classes = [
 	"Instance",
 	"Folder",
@@ -50,7 +51,9 @@ lines_before = [
 	"type p<T> ="+space+"T?|()->T",
 	"type e<T=()->()> ="+space+"T?",
 	"type a={priority:"+space+"number,"+space+"callback:"+space+"(Instance)"+space+"->"+space+"()}",
-	"type c<T> =a|T|Instance|()->{Instance}|Instance"
+	"type c<T> =a|T|Instance|()->{Instance}|Instance",
+	"type Dictionary = {[string]: any}",
+	"type Array = {any}"
 ]
 
 lines_after = [
@@ -75,34 +78,37 @@ aliases = {
 	"double": "number",
 	"bool": "boolean",
 	"Content": "string",
-	"string": "string"+space+"|"+space+"number"
+	"string": "string"+space+"|"+space+"number",
+	"OptionalCoordinateFrame": "CFrame?",
+	"BinaryString": "string",
 }
 
-mapCorrections = {}
-mapRobloxClasses = {}
+map_corrections = {}
+map_roblox_classes = {}
 
 for roblox_class in api_dump["Classes"]:
-	mapRobloxClasses[roblox_class["Name"]] = roblox_class
+	map_roblox_classes[roblox_class["Name"]] = roblox_class
 
 for correction_class in corrections_dump["Classes"]:
-	mapCorrections[correction_class["Name"]] = correction_class
+	map_corrections[correction_class["Name"]] = correction_class
 
 def get_prop_type(value_type):
 
 	prop = ""
 
-	if value_type["Category"] == "Enum":
-		prop = "Enum." + value_type["Name"]
-	elif value_type["Category"] == "Class":
-		prop = value_type["Name"] + "?"
-	elif value_type["Category"] == "Primitive":
-		value_name = value_type["Name"]
-		prop = aliases.get(value_name) or value_name
-	elif value_type["Category"] == "DataType":
-		value_name = value_type["Name"]
-		prop = aliases.get(value_name) or value_name
-	elif value_type["Category"] == "Group":
-		prop = value_type["Name"]
+	match value_type["Category"]:
+		case "Enum":
+			prop = "Enum." + value_type["Name"]
+		case "Class":
+			prop = value_type["Name"] + "?"
+		case "Primitive":
+			value_name = value_type["Name"]
+			prop = aliases.get(value_name) or value_name
+		case "DataType":
+			value_name = value_type["Name"]
+			prop = aliases.get(value_name) or value_name
+		case "Group":
+			prop = value_type["Name"]
 
 	# Map value types
 
@@ -110,7 +116,7 @@ def get_prop_type(value_type):
 
 def append_class(roblox_class):
 	#lines.append("\t-- " + roblox_class["Name"])
-	correction_class = mapCorrections.get(roblox_class["Name"]) or {"Members": []}
+	correction_class = map_corrections.get(roblox_class["Name"]) or {"Members": []}
 	correction_members_map = {}
 
 	for member in correction_class["Members"]:
@@ -147,11 +153,15 @@ def append_class(roblox_class):
 					line += ","
 				is_first = False
 
-				line += parameter["Name"] + ":"
 
 				if correction_parameter == None:
-					line += get_prop_type(parameter["Type"])
+					value = get_prop_type(parameter["Type"])
+					if value == "Tuple":
+						line += "...any"
+					else:
+						line += parameter["Name"] + ":" + value
 				else:
+					line += parameter["Name"] + ":"
 					name = correction_parameter["Type"].get("Name")
 					generic = correction_parameter["Type"].get("Generic")
 
@@ -164,15 +174,66 @@ def append_class(roblox_class):
 			lines.append(line)
 	
 	if roblox_class["Superclass"] != "<<<ROOT>>>":
-		append_class(mapRobloxClasses[roblox_class["Superclass"]])
+		append_class(map_roblox_classes[roblox_class["Superclass"]])
+
+if compile_for_all_classes:
+	desired_classes = map_roblox_classes
 
 for class_name in desired_classes:
-	roblox_class = mapRobloxClasses[class_name]
+	
+	roblox_class = map_roblox_classes[class_name]
+
+	if 'Tags' in roblox_class and "NotCreatable" in roblox_class['Tags']:
+		continue
 	name = roblox_class['Name']
-	lines.append("export type p" + name + space + "="+space+"{"+new_line_not_required)
+	lines.append("export type v" + name + space + "="+space+"{"+new_line_not_required)
 	append_class(roblox_class)
-	lines.append(indent+"[number]:"+space+"c<p"+name+">"+new_line)
+	lines.append(indent+"[number]:"+space+"c<v"+name+">"+new_line)
 	lines.append(new_line_not_required+"}"+new_line)
 
-single_line = new_line.join(lines_before) + new_line + ''.join(lines) + new_line.join(lines_after)
-print(single_line)
+with open("src/roblox_types.luau", "wt") as file:
+
+	single_line = new_line.join(lines_before) + new_line + ''.join(lines) + new_line.join(lines_after)
+	file.write(single_line)
+	
+	file.close()
+
+with open("src/create.luau", "r") as reader:
+	line_create_at = 0
+	is_found = False
+	lines = reader.readlines()
+	for line in lines:
+		line_create_at += 1
+		if line.find("return (create") != -1:
+			is_found = True
+			break
+	
+	# We found the line we can start modifying from
+	
+	with open("src/create.luau", "w") as writer:
+		
+		# First write all the lines from 0 to line_create_at-1
+		#lines = reader.readlines(100)
+		writer.writelines(lines[:line_create_at])
+		iterate_through = desired_classes
+		first = True
+		
+		if compile_for_all_classes:
+			iterate_through = map_roblox_classes
+		
+		for name in iterate_through:
+			roblox_class = map_roblox_classes[name]
+			# Skip unnecessary  classes
+			if "Tags" in roblox_class and "NotCreatable"in roblox_class["Tags"]: continue
+			if first:
+				first = False
+			else:
+				writer.write("&")
+			writer.write(f'\t( (class: "{name}") -> (r.v{name}) -> {name} )\n')
+			
+
+		writer.close()
+		pass
+	
+	reader.close()
+	
