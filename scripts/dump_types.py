@@ -237,3 +237,42 @@ with open("src/create.luau", "r") as reader:
 	
 	reader.close()
 	
+with open("src/init.luau", "r") as reader:
+	line_create_at = 0
+	is_found = False
+	lines = reader.readlines()
+	for line in lines:
+		line_create_at += 1
+		if line.find("-- TYPES HERE") != -1:
+			is_found = True
+			break
+	
+	# We found the line we can start modifying from
+	
+	with open("src/init.luau", "w") as writer:
+		
+		# First write all the lines from 0 to line_create_at-1
+		#lines = reader.readlines(100)
+		writer.writelines(lines[:line_create_at])
+		lines_after = lines[line_create_at+1:]
+
+		iterate_through = desired_classes
+		first = True
+		
+		if compile_for_all_classes:
+			iterate_through = map_roblox_classes
+		
+		for name in iterate_through:
+			roblox_class = map_roblox_classes[name]
+			# Skip unnecessary  classes
+			if "Tags" in roblox_class and "NotCreatable"in roblox_class["Tags"]: continue
+			if first:
+				first = False
+			writer.write(f'export type v{name} = roblox_types.v{name}\n')
+			
+	
+		writer.writelines(lines_after)
+		writer.close()
+		pass
+	
+	reader.close()

@@ -160,6 +160,7 @@ return (create :: any) ::
 &	( (class: "DialogChoice") -> (r.vDialogChoice) -> DialogChoice )
 &	( (class: "Dragger") -> (r.vDragger) -> Dragger )
 &	( (class: "EditableImage") -> (r.vEditableImage) -> EditableImage )
+&	( (class: "RobloxEditableImage") -> (r.vRobloxEditableImage) -> RobloxEditableImage )
 &	( (class: "EulerRotationCurve") -> (r.vEulerRotationCurve) -> EulerRotationCurve )
 &	( (class: "ExperienceInviteOptions") -> (r.vExperienceInviteOptions) -> ExperienceInviteOptions )
 &	( (class: "Explosion") -> (r.vExplosion) -> Explosion )

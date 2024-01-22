@@ -40,7 +40,7 @@ local Signal = {} :: any do
     end
 end
 
-local Instance = {} :: any do
+local instance_lib = {} do
     --[[
 
     attempt to mimic roblox engine's method of userdata reflection
@@ -148,7 +148,7 @@ local Instance = {} :: any do
         end)()
     end
 
-    function Instance.new(class: string): Instance
+    function instance_lib.new(class: string): Instance
         local data = {
             name = "UNNAMED",
             parent = nil,
@@ -163,13 +163,13 @@ local Instance = {} :: any do
         return get_proxy(data) :: any
     end
 
-    function Instance.is_instance(value: unknown): boolean
+    function instance_lib.is_instance(value: unknown): boolean
         return is_instance(value)
     end
 
     function methods.Clone(userdata: userdata): userdata
         local data = get_data(userdata)
-        local clone_userdata = (Instance.new("") :: any) :: userdata
+        local clone_userdata = (instance_lib.new("") :: any) :: userdata
         local clone_data = get_data(clone_userdata)
 
         for i, v in next, deep_clone(data) do
@@ -320,14 +320,14 @@ local Enum = {} :: any do
 end
 
 local typeof = function(v)
-    return if Instance.is_instance(v) then "Instance"
+    return if instance_lib.is_instance(v) then "Instance"
         elseif getmetatable(v) and getmetatable(v).__type then getmetatable(v).__type
         else type(v)
 end :: any
 
 return {
     Signal = Signal,
-    Instance = Instance :: typeof(Instance),
+    Instance = instance_lib :: InstanceLib,
     Color3 = Color3 :: typeof(Color3),
     Vector2 = Vector2 :: typeof(Vector2),
     Vector3 = Vector3 :: typeof(Vector3),
