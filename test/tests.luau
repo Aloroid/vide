@@ -1017,6 +1017,30 @@ TEST("show()", wrap_root(function()
         CHECK(output() == 2)
     end
 
+    do CASE "constants"
+        -- uses switch() internally, more extensive testing of scoping not needed
+        local value = source("truey" :: unknown)
+        local function one() return 1 end
+        local function two() return 2 end
+
+        local output = show(value, 1, 2)
+
+        CHECK(output() == 1)
+        value(nil)
+        CHECK(output() == 2)
+    end
+
+    do CASE "constant key"
+        -- uses switch() internally, more extensive testing of scoping not needed
+        local function two() return 2 end
+
+        local output = show(true, 1, two)
+
+        CHECK(output() == 1)
+        output = show(false, 1, two)
+        CHECK(output() == 2)
+    end
+
     do CASE "alt"
         local visible = vide.source(true)
         local count = vide.source(0)
@@ -1190,6 +1214,29 @@ TEST("switch()", wrap_root(function()
 
         vide.strict = false
     end
+
+    do CASE "constant key"
+        local output = switch(true) {
+            [true] = function() return 1 end,
+            [false] = function() return 0 end
+        }
+
+        CHECK(output() == 1)
+    end
+
+    do CASE "constant value"
+        local input = source(true)
+        local output = switch(input) {
+            [true] = 1,
+            [false] = function() return 0 end
+        }
+
+        CHECK(output() == 1)
+        input(false)
+        CHECK(output() == 0)
+    end
+
+    
 end))
 
 TEST("indexes()", wrap_root(function()

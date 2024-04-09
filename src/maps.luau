@@ -3,6 +3,7 @@ if not game then script = require "test/relative-string" end
 local throw = require(script.Parent.throw)
 local flags = require(script.Parent.flags)
 local graph = require(script.Parent.graph)
+local read = require(script.Parent.read)
 type Node<T> = graph.Node<T>
 type StartNode<T> = graph.StartNode<T>
 local create_node = graph.create_node
@@ -27,7 +28,7 @@ local function check_primitives(t: {})
     end
 end
 
-local function indexes<K, VI, VO>(input: () -> Map<K, VI>, transform: (() -> VI, K) -> VO): () -> { VO }
+local function indexes<K, VI, VO>(input: (() -> Map<K, VI>) | Map<K, VI>, transform: (() -> VI, K) -> VO): () -> { VO }
     local owner = assert_owning_scope()
 
     local subowner = create_node(false, false)
@@ -39,7 +40,7 @@ local function indexes<K, VI, VO>(input: () -> Map<K, VI>, transform: (() -> VI,
     local remove_queue = {} :: { K }
     local scopes = {} :: Map<K, Node<unknown>>
 
-    local function update_children(data)
+    local function update_children(data: Map<K, VI>)
         -- queue removed values
         for i in next, input_cache do
             if data[i] == nil then
@@ -110,7 +111,7 @@ local function indexes<K, VI, VO>(input: () -> Map<K, VI>, transform: (() -> VI,
     end
 
     local node = create_node(false :: any, function()
-        return update_children(input())
+        return update_children(read(input))
     end)
     set_owner(node, owner)
 
@@ -122,7 +123,7 @@ local function indexes<K, VI, VO>(input: () -> Map<K, VI>, transform: (() -> VI,
     end
 end
 
-local function values<K, VI, VO>(input: () -> Map<K, VI>, transform: (VI, () -> K) -> VO): () -> { VO }
+local function values<K, VI, VO>(input: (() -> Map<K, VI>) | Map<K, VI>, transform: (VI, () -> K) -> VO): () -> { VO }
     local owner = assert_owning_scope()
 
     local subowner = create_node(false, false)
@@ -213,7 +214,7 @@ local function values<K, VI, VO>(input: () -> Map<K, VI>, transform: (VI, () -> 
     end
 
     local node = create_node(false :: any, function()
-        return update_children(input())
+        return update_children(read(input))
     end)
     set_owner(node, owner)
 

@@ -2,6 +2,7 @@ if not game then script = require "test/relative-string" end
 
 local throw = require(script.Parent.throw)
 local graph = require(script.Parent.graph)
+local read = require(script.Parent.read)
 type Node<T> = graph.Node<T>
 type StartNode<T> = graph.StartNode<T>
 local create_node = graph.create_node
@@ -15,15 +16,15 @@ local close_scope = graph.close_scope
 
 type Map<K, V> = { [K]: V }
 
-local function switch<T, U>(source: () -> T): (map: Map<T, ((() -> U)?)>) -> () -> U?
+local function switch<T, U>(source: (() -> T) | T): (map: Map<T, (U | (() -> U)?)>) -> () -> U?
     local owner = assert_owning_scope()
 
     return function(map)
         local last_scope: Node<false>?
-        local last_component: (() -> U)?
+        local last_component: U | (() -> U)?
 
         local function update(cached): U?
-            local component = map[source()]
+            local component = map[read(source)]
             if component == last_component then return cached end
             last_component = component
 
@@ -35,7 +36,8 @@ local function switch<T, U>(source: () -> T): (map: Map<T, ((() -> U)?)>) -> () 
             if component == nil then return nil end
 
             if type(component) ~= "function" then
-                throw "map must map a value to a function"
+                last_scope = nil
+                return component
             end
 
             local new_scope = create_node(false, false)
