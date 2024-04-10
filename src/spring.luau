@@ -212,6 +212,7 @@ local function spring<T>(source: () -> T, speed: number?, damping: number?): () 
 
     -- set initial position to goal
     data.x_123, data.x_456 = data.b_123, data.b_456
+    data.a_123, data.a_456 = data.b_123, data.b_456
 
     -- set output to goal
     output.cache = data.source_value
