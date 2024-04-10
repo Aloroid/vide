@@ -152,6 +152,7 @@ setmetatable(vec6_to_type, invalid_type)
 -- maps spring data to its corresponding output node
 -- lifetime of spring data is tied to output node
 local springs: { [SpringData<any>]: StartNode<any> } = {}
+local clock = 0
 setmetatable(springs, { __mode = "v" })
 
 local function spring<T>(source: () -> T, speed: number?, damping: number?): () -> T
@@ -200,7 +201,7 @@ local function spring<T>(source: () -> T, speed: number?, damping: number?): () 
         data.a_123, data.a_456 = data.x_123, data.x_456
         data.v0_123, data.v0_456 = data.v1_123, data.v1_456
         data.source_value = value
-        data._last_schedule = os.clock() -- todo: instead use the time of when the frame started.
+        data._last_schedule = clock -- frametimes do not matter
         springs[data] = output -- todo: investigate why insertion is not O(1) at ~20k springs
         return value
     end
@@ -294,13 +295,12 @@ local function spring_coefficients(time: number, damping: number, speed: number)
 end
 
 local function step_springs(dt: number)
-    local now = os.clock()
     for data in next, springs do
         local speed, damping = data.speed, data.damping
         local a_123, a_456 = data.a_123, data.a_456
         local b_123, b_456 = data.b_123, data.b_456
 
-        local pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(now - data._last_schedule, damping, speed)
+        local pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(clock - data._last_schedule, damping, speed)
 
         -- calculate displacement from target
         local d0_123, d0_456 = a_123 - b_123, a_456 - b_456
@@ -311,6 +311,7 @@ local function step_springs(dt: number)
         data.x_123, data.x_456 = d1_123 + b_123, d1_456 + b_456
         data.v1_123, data.v1_456 =  v1_123, v1_456
     end
+    clock += dt
 end
 
 local remove_queue = {}
@@ -348,10 +349,11 @@ local function update_spring_sources()
 end
 
 return function()
-    local time_elapsed = 0
 
+    local time_elapsed = 0
     return spring, function(dt: number)
         time_elapsed += dt
+        clock += dt
 
         while time_elapsed > 1 / UPDATE_RATE do
             time_elapsed -= 1 / UPDATE_RATE
